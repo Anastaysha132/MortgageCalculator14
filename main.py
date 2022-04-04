@@ -4,6 +4,10 @@ from kivy.uix.boxlayout import BoxLayout
 from kivymd.app import MDApp
 from kivymd.theming import ThemableBehavior
 from kivymd.uix.list import OneLineIconListItem, MDList
+from kivymd.uix.tab import MDTabsBase
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivymd.icon_definitions import md_icons
+from kivymd.font_definitions import fonts
 
 KV = '''
 # Menu item in the DrawerList list.
@@ -69,9 +73,8 @@ Screen:
                         elevation: 10
                         left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
 
-                    Widget:
-                        MDTextField:
-                            hint_text: "No helper text"
+                    MDTabs:
+                        id: tabs
 
         MDNavigationDrawer:
             id: nav_drawer
@@ -80,6 +83,8 @@ Screen:
                 id: content_drawer
 '''
 
+class Tab(MDFloatLayout, MDTabsBase):
+    pass
 
 class ContentNavigationDrawer(BoxLayout):
     pass
@@ -120,5 +125,9 @@ class MortgageCalculatorApp(MDApp):
                 ItemDrawer(icon=icon_name, text=icons_item[icon_name])
             )
 
+        for icon_name, name_tab in icons_item.items():
+            self.root.ids.tabs.add_widget(
+                Tab(text=f"[ref={name_tab}][font={fonts[-1]['fn_regular']}]{md_icons[icon_name]}[/font][/ref]{name_tab}"
+            ))
 
 MortgageCalculatorApp().run()
